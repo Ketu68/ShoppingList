@@ -1,0 +1,56 @@
+﻿@using ShoppingList.ViewModels
+@using ShoppingList.Models;
+@model List<SignupVm>
+
+<div class="row no-gutters m-3">
+    <div class="card col-sm-8 col-md-10 col-lg-12 mx-auto shadow">
+        <div class="card-header text-center">
+            <h4 class="m-0">Shopping List</h4>
+        </div>
+        <div class="card-header text-left">
+            <div class="row mb-0">
+                <div class="col-2">
+                    <h5 class="m-0 text-black-50">
+                        Item
+                    </h5>
+                </div>
+                <div class="col-2">
+                    <h5 class="m-0 text-black-50">
+                        Store
+                    </h5>
+                </div>
+                <div class="col-3">
+                    <h5 class="m-0 text-black-50">
+                        Cost
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @foreach (var signup in Model)
+            {
+                using (Html.BeginForm("Unsubscribe", "Admin", FormMethod.Post))
+                {
+                    <input type="hidden" name="Id" value="@signup.Id" />
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            @signup.Item
+                        </div>
+                        <div class="col-2">
+                            @signup.Store
+                        </div>
+                        <div class="col-3">
+                            @signup.Cost
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-danger btn-block">
+                                Delete From List
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
