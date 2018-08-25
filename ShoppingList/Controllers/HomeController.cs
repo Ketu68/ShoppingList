@@ -11,13 +11,32 @@ using System.Data.OleDb;
 
 namespace ShoppingList.Controllers
 {
+
     public class HomeController : Controller
     {
         public int RunningTotal = 0;
+        //private ShoppingEntities1 db = new ShoppingEntities1();
 
         public ActionResult Index()
         {
-            return View();
+            using (ShoppingEntities1 db = new ShoppingEntities1())
+            {
+                var signups = (from c in db.ShoppingLists
+                               where c.Removed == null
+                               select c).ToList();
+                var signupVms = new List<SignupVm>();
+                foreach (var signup in signups)
+                {
+                    var signupVm = new SignupVm();
+                    signupVm.Id = signup.Id;
+                    signupVm.Item = signup.Item;
+                    signupVm.Store = signup.Store;
+                    signupVm.Cost = signup.Cost;
+
+                    signupVms.Add(signupVm);
+                }
+            return View(signupVms);
+            }
         }
         [HttpPost]
         public ActionResult SignUp(string Item, string Store, string Cost)
@@ -36,20 +55,35 @@ namespace ShoppingList.Controllers
                     signup.Store = Store;
                     signup.Cost = Cost;
 
+                    //ViewBag.Item = signup.Item;
+                    //ViewBag.Store = signup.Store;
+                    //ViewBag.Cost = signup.Cost;
+
                     db.ShoppingLists.Add(signup);
                     db.SaveChanges();
-
                 }
-                return View("Success");
-                //return View("Index");
-                //return View(SignupVm);   //------------------------- DOESNT WORK ---------------------------------
+                return RedirectToAction("Index");
+
             }
         }
+
+        public ActionResult Unsubscribe(int Id)
+        {
+            using (ShoppingEntities1 db = new ShoppingEntities1())
+            {
+                var signup = db.ShoppingLists.Find(Id);
+                signup.Removed = DateTime.Now;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Import(string Item, string Store, string Cost)
         {
             ImportDataFromExcel(@"C:\Users\User\source\repos\ShoppingList\ShoppingList\App_Data\ShoppingListImport.xls");
             //ImportDataFromExcel(@"~\App_Data\ShoppingListImport.xls");
-            return View("Success");
+            //return View("Success");
+            return View("Index");
         }
 
         public void ImportDataFromExcel(string excelFilePath)
@@ -84,7 +118,7 @@ namespace ShoppingList.Controllers
                 dr.Close();
                 oledbconn.Close();
             }
-            catch (Exception ex)
+            catch
             {
                 return;
             }

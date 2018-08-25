@@ -21,18 +21,23 @@
                     <div class="form-group col-md-3">
                         <input name="Cost" type="text" class="form-control" placeholder="Cost" />
                     </div>
-
                     <button type="submit" class="btn btn-primary">Add Item To List</button>
                 </div>
             }
             @using (Html.BeginForm("Import", "Home", FormMethod.Post))
             {
                 <div class="card-header text-center">
+
+                    @*----------------------------------------------------------------------------------------------------------*@
+                    @*----------------------------NEITHER OF THESE WORK.  BOTH RETURN NULL EXCEPTIONS---------------------------*@
+                    @*----------------------------------------------------------------------------------------------------------*@
+
                     <button type="submit" class="btn btn-secondary">Import List from Excel</button>
+                    @Html.ActionLink("Import data from Excel", "Import")
                 </div>
             }
         </div>
-        <div class="card-header text-center">
+        <div class="card -header text-center">
             <h2 class="m-0">Here is your shopping list : </h2>
         </div>
 
@@ -60,29 +65,38 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="card-body">
-
-                    @*---------------------- I GET NULL REFERENCE EXCEPTION FOR MODEL ---------------------------*@
-
-                    @*@foreach (var signup in Model)
-                    {
-                        using (Html.BeginForm("Unsubscribe", "Admin", FormMethod.Post))
-                        {
-                            <div class="row">
-                                <div class="col">
-                                    @signup.Item
-                                </div>
-                                <div class="col">
-                                    @signup.Store
-                                </div>
-                                <div class="col">
-                                    @signup.Cost
-                                </div>
-                            </div>
-                        }
-                    }*@
+        <div class="row no-gutters m-3">
+            <div class="card col-sm-8 col-md-10 col-lg-12 mx-0 shadow">
+                @foreach (var item in Model)
+                {
+                <div class="card-header text-left">
+                    <div class="row mb-0">
+                        <div class="col-2">
+                            <h5 class="m-0 text-black-50">
+                                @Html.DisplayFor(modelItem => item.Item)
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="m-0 text-black-50">
+                                @Html.DisplayFor(modelItem => item.Store)
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="m-0 text-black-50">
+                                @Html.DisplayFor(modelItem => item.Cost)
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <h5 class="m-0 text-black-50">
+                                @Html.ActionLink("Delete Item", "Unsubscribe", new { id = item.Id })
+                            </h5>
+                        </div>
+                    </div>
                 </div>
+                }
             </div>
         </div>
     </div>
