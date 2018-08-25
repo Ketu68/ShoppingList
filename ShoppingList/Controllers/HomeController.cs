@@ -47,7 +47,8 @@ namespace ShoppingList.Controllers
         }
         public ActionResult Import(string Item, string Store, string Cost)
         {
-            ImportDataFromExcel("C:\\Users\\User\\Source\\Repos\\ShoppingList\\ShoppingList\\ShoppingListImport.xls");
+            ImportDataFromExcel(@"C:\Users\User\source\repos\ShoppingList\ShoppingList\App_Data\ShoppingListImport.xls");
+            //ImportDataFromExcel(@"~\App_Data\ShoppingListImport.xls");
             return View("Success");
         }
 
